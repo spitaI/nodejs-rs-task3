@@ -5,11 +5,17 @@ var db = require('./db');
 var user = require('./controllers/usercontroller');
 var game = require('./controllers/gamecontroller');
 
+const PORT = 4000;
+
 db.sync();
-app.use(require('body-parser'));
+// Fixed LOGICAL ERROR: bodyParser itself was passed, not the json middleware
+app.use(require('body-parser').json());
 app.use('/api/auth', user);
-app.use(require('./middleware/validate-session'));
-app.use('/api/game', game);
-app.listen(function () {
+
+// Fixed LOGICAL ERROR: validate-session middleware was used for the whole app, not only for game route
+app.use('/api/game', require('./middleware/validate-session'), game);
+
+// Fixed LOGICAL ERROR: Port was not specified
+app.listen(PORT, function () {
   console.log('App is listening on 4000');
 });
