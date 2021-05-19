@@ -1,21 +1,23 @@
-require('dotenv').config();
-var express = require('express');
-var app = express();
-var db = require('./db');
-var user = require('./controllers/usercontroller');
-var game = require('./controllers/gamecontroller');
+import express from 'express';
+import bodyParser from 'body-parser';
+
+import validateSession from './middleware/validate-session.js';
+import userController from './controllers/usercontroller.js';
+import gameController from './controllers/gamecontroller.js';
+import db from './db.js';
 
 const PORT = 4000;
+const app = express();
 
 db.sync();
+
 // Fixed LOGICAL ERROR: bodyParser itself was passed, not the json middleware
-app.use(require('body-parser').json());
-app.use('/api/auth', user);
+app.use(bodyParser.json());
+
+app.use('/api/auth', userController);
 
 // Fixed LOGICAL ERROR: validate-session middleware was used for the whole app, not only for game route
-app.use('/api/game', require('./middleware/validate-session'), game);
+app.use('/api/game', validateSession, gameController);
 
 // Fixed LOGICAL ERROR: Port was not specified
-app.listen(PORT, function () {
-  console.log('App is listening on 4000');
-});
+app.listen(PORT, () => console.log('App is listening on 4000'));
