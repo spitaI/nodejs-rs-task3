@@ -1,26 +1,27 @@
-module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('user', {
-        full_name: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
+import Sequelize from 'sequelize';
 
-        username: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
+export default sequelize =>
+  sequelize.define('user', {
+    full_name: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
 
-        passwordHash: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
+    username: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
 
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            validate: {
-                isEmail: true
-            }
-        }
-    })
-}
+    passwordHash: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+
+    email: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      validate: {
+        isEmail: true,
+      },
+    },
+  });
